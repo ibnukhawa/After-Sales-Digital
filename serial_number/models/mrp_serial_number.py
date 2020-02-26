@@ -167,7 +167,20 @@ class MrpSerialNumber(models.Model):
 		res = super(MrpSerialNumber, self).create(vals)
 		if vals.get('bom_id') or vals.get('production_id'):
 			res.action_fill_part_request_lines()
-		return res
+			
+		# ICEBOARD
+        if values.get('product_id') == 'ICE Board 98 Inch 4K UHD - Version II':
+            values['name'] = self.env['ir.sequence'].get('ice.98')
+        elif values.get('product_id') == 'ICE Board 86 Inch 4K UHD - Version II':
+            values['name'] = self.env['ir.sequence'].get('ice.86')
+        elif values.get('product_id') == 'ICE Board 75 Inch 4K UHD - Version II':
+            values['name'] = self.env['ir.sequence'].get('ice.75')
+        elif values.get('product_id') == 'ICE Board 65 Inch 4K UHD - Version II':
+            values['name'] = self.env['ir.sequence'].get('ice.65')
+        else:
+            values['name'] = self.env['ir.sequence'].get('ice.62')
+        result = super(SerialNumber,self).create(values)
+		return res, result
 
 	@api.multi
 	def write(self, vals):
