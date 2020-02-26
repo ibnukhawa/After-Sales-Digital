@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="report_mrp_serial_number" 
+            model="mrp.serial.number" 
+            string="Serial Number"
+            name="serial_number.mrp_serial_number_template" 
+            file="serial_number.mrp_serial_number_template" 
+            report_type="qweb-pdf"/>
+
+        <template id="serial_number_template">
+            <t t-call="report.html_container">
+                <div class="page">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="col-xs-4" style="padding:0;">
+                            <table style="border-spacing:0;margin-bottom:0;height:122px;" class="table">
+                                <thead>
+                                    <tr style="width: 8in;">
+                                        <td style="border: 2px solid black;width: 2.63in;text-align: center" colspan="2" class="col-xs-8 danger">
+                                            <t t-if="doc.product_id">
+                                                <strong t-field="doc.product_id"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="width: 8in;">
+                                        <td style="border: 2px solid black;text-align: center; vertical-align: middle;" class="col-xs-5">
+                                            <img t-if="doc.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', doc.name, 150, 150)"/><br/>
+                                            <span t-field="doc.name"/><br/>
+                                            <span t-field="doc.date"/><br/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        
+    </data>
+</odoo>
