@@ -9,7 +9,9 @@ class MrpSerialNumber(models.Model):
 	_order = 'date_scheduled desc'
 
 	name = fields.Char(string='Serial Number',  copy=False,  index=True, default=lambda self: _('New'))
-	product_id = fields.Many2one('product.template', string="Product")
+	sale_id = fields.Many2one('sale.order', string='SO Reference')
+	product_id = fields.Many2one('product.template', string="Product", )
+	partner_id = fields.Many2one('res.partner', string="Customer", related='sale_id.partner_id')
 	bom_id = fields.Many2one('mrp.bom', string="Bill of Materials")
 	location_src_id = fields.Many2one('stock.location', string="Source Location", domain=[('usage', '=', 'internal')])
 	location_dest_id = fields.Many2one('stock.location', string="Destination Location", domain=[('usage', '=', 'internal')])
@@ -18,11 +20,9 @@ class MrpSerialNumber(models.Model):
 	warehouse_id = fields.Many2one('stock.warehouse', string="User")
 	picking_count = fields.Integer(compute="compute_picking_count")
 	production_id = fields.Many2one('mrp.production', string="Production")
-	partner_id = fields.Many2one('res.partner', string="Customer", related='sale_id.partner_id')
 	company_id = fields.Many2one('res.company', string='Company', change_default=True,
         required=True, readonly=True, default=lambda self: self.env.user.company_id.id)
 	user_id = fields.Many2one('res.users', default=lambda self: self.env.user)
-	sale_id = fields.Many2one('sale.order', string='SO Reference')
 	categ_id = fields.Many2one(
         'product.category', 'Internal Category',
         change_default=True, domain="[('type','=','normal')]",
@@ -167,20 +167,7 @@ class MrpSerialNumber(models.Model):
 		res = super(MrpSerialNumber, self).create(vals)
 		if vals.get('bom_id') or vals.get('production_id'):
 			res.action_fill_part_request_lines()
-			
-		# ICEBOARD
-        if values.get('product_id') == 'ICE Board 98 Inch 4K UHD - Version II':
-            values['name'] = self.env['ir.sequence'].get('ice.98')
-        elif values.get('product_id') == 'ICE Board 86 Inch 4K UHD - Version II':
-            values['name'] = self.env['ir.sequence'].get('ice.86')
-        elif values.get('product_id') == 'ICE Board 75 Inch 4K UHD - Version II':
-            values['name'] = self.env['ir.sequence'].get('ice.75')
-        elif values.get('product_id') == 'ICE Board 65 Inch 4K UHD - Version II':
-            values['name'] = self.env['ir.sequence'].get('ice.65')
-        else:
-            values['name'] = self.env['ir.sequence'].get('ice.62')
-        result = super(SerialNumber,self).create(values)
-		return res, result
+		return res
 
 	@api.multi
 	def write(self, vals):
@@ -244,15 +231,17 @@ class MrpPartRequestLine(models.Model):
 	_name = 'mrp.part.request.line'
 
 	part_request_id = fields.Many2one('mrp.serial.number', string="Material Request")
-	product_id = fields.Many2one('product.product',  string="Product")
+	sale_id = fields.Many2one('sale.order', string='SO Reference')	
+	product_id = fields.Many2one('product.product', string="Product")
 	description = fields.Char()
 	serial_number_ids = fields.Many2many('serial.number.pabrik',string='Serial Number Pabrik')
+	serial_number_pabrik = fields.Char(string = 'Serial Number Pabrik',)
 	quantity = fields.Float()
 	uom_id = fields.Many2one('product.uom', string="Unit of Measure")
 	item_size = fields.Char()
 	item_qty = fields.Integer()
 	move_id = fields.Many2one('stock.move', string="Stock Move")
-	# serial_number_pabrik = fields.Char(string = 'Serial Number Pabrik',)
+	
 
 	@api.multi
 	@api.onchange('product_id')
