@@ -3,13 +3,16 @@
   'author': 'Bayu Dwi Saputra & Ibnu Nur Khawarizmi',
   'version': '0.1',
   'depends': [
-    'sale','product','mrp', 'serial_pabrik'
+    'sale','product','mrp','mrp_production_draft', 'stock_mts_mto_rule' , 'serial_pabrik'
   ],
   'data': [
     
     'views/mrp_serial_number.xml',
-    'data/mrp_serial_number_sequence.xml'
+    'report/report_mrp_serial_number.xml', 
+    # 'data/mrp_serial_number_sequence.xml'
+    
   ],
+
   'qweb': [
 
   ],

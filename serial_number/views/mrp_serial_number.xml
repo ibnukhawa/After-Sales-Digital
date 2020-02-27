@@ -46,14 +46,15 @@
 		        							</group>
 		        							<group>
 		        								<field name="description" />
-		        								
+												<!-- <field name="serial_number_ids"/> -->
 		        							</group>
 		        						</group>
 		        					</form>
 		        					<tree string="Component" editable="bottom" >
 		        						<field name="part_request_id" invisible="True" />
+										<field name="product_id" />
 		        						<field name="description" />
-										<field name="serial_number_ids"/>
+										<field name="serial_number_pabrik"/>
 		        						<field name="quantity" />
 		        						<field name="uom_id" />
 		        					</tree>
@@ -98,33 +99,5 @@
             action="serial_number.action_mrp_part_request"
 
         />
-
-	<!-- ICE BOARD SEQUENCE -->
-
-    <record id="sequence_ice_98" model="ir.sequence">
-        <field name="name">Serial Number IceBoard 98</field>
-        <field name="code">ice.98</field>
-        <field name="padding">4</field>
-        <field name="prefix">ICE298-%(y)s%(month)s-</field>
-    </record>
-    <record id="sequence_ice_86" model="ir.sequence">
-        <field name="name">Serial Number IceBoard 86</field>
-        <field name="code">ice.86</field>
-        <field name="padding">4</field>
-        <field name="prefix">ICE286-%(y)s%(month)s-</field>
-    </record>
-    <record id="sequence_ice_75" model="ir.sequence">
-        <field name="name">Serial Number IceBoard 75</field>
-        <field name="code">ice.75</field>
-        <field name="padding">4</field>
-        <field name="prefix">ICE275-%(y)s%(month)s-</field>
-    </record>
-    <record id="sequence_ice_65" model="ir.sequence">
-        <field name="name">Serial Number IceBoard 65</field>
-        <field name="code">ice.65</field>
-        <field name="padding">4</field>
-        <field name="prefix">ICE265-%(y)s%(month)s-</field>
-    </record>
-    
 	</data>
 </odoo> 
